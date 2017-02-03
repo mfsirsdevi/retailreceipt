@@ -16,9 +16,14 @@
         public $hostName;
         public $userName;
         public $password;
+        public $errorFile;
+        public $logFile;
+
         function __construct()
         {
             $this->connection = null;
+            $this->errorFile = __DIR__."\logfiles\logerror.txt";
+            $this->logFile = __DIR__."\logfiles\logreport.txt";
         }
 
         //----- Initialize function -----
@@ -35,27 +40,29 @@
         {
             $this->connection = new FileMaker($this->databaseName, $this->hostName, $this->userName, $this->password);
             if (FileMaker::isError($this->connection)) {
-                //$this->handleError("Can't connect to database");
+                $this->writeLog("Can't connect to database", $this->errorFile);
                 return false;
             }
-            //$this->reportLog("Connection Successful!");
+            $this->writeLog("Connection Successful!", $this->logFile);
             return true;
         }
 
         public function findData($layout, $sortR)
         {
             if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
                 return false;
             }
+
             $request = $this->connection->newFindAllCommand($layout);
             $request->addSortRule($sortR, 1);
             $result = $request->execute();
             if (FileMaker::isError($result)) {
-                //$this->handleError("Error fetching the data");
+                $this->writeLog("Error in executing findData method", $this->errorFile);
                 return false;
             }
-            //$this->reportLog("Data Fetch Successful!");
-            return $result;
+            $this->writeLog("Data Fetch Successful!", $this->logFile);
+            return $result->getRecords();
         }
 
         public function saveToDB()
@@ -63,14 +70,12 @@
             # code...
         }
 
-        public function handleError($str)
+        public function writeLog($str, $fileName)
         {
-            error_log($str, 3, "./logfiles/errorReport.log");
-        }
-
-        public function reportLog($value)
-        {
-            error_log($value, 3, "./logfiles/logreport.log");
+            $dateTime = date("Y-m-d h:i:sa");
+            $textfile = fopen($fileName, "a");
+            fwrite($textfile, "[".$dateTime."]-".$str."\n");
+            fclose($textfile);
         }
     }
  ?>

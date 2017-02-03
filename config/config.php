@@ -9,4 +9,3 @@
     $retailobj = new RetailReceipt();
 
     $retailobj->initDB($database, $host, $username, $password);
-    $retailobj->DBLogin();

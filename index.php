@@ -4,7 +4,7 @@
     require_once "./config/config.php";
 
     //Initializing the database connection
-    $result = $retailobj->findData("order", "date");
+    $records = $retailobj->findData("order", "date");
 ?>
 
   <div class="container">
@@ -20,8 +20,7 @@
               <th>Customer Name</th>
               <th>Total Price</th>
             </thead>
-            <?php if ($result) {
-                $records = $result->getRecords();
+            <?php if ($records) {
                 foreach ($records as $record) { ?>
                   <tr>
                     <td><?php echo $record->getField("date"); ?></td>
