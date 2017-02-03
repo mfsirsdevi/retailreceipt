@@ -5,6 +5,7 @@
 
     //Initializing the database connection
     $records = $retailobj->findData("order", "date");
+    $recordsCount = 0;
 ?>
 
   <div class="container">
@@ -15,23 +16,30 @@
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
-              <th>Date</th>
-              <th>Order No.</th>
-              <th>Customer Name</th>
-              <th>Total Price</th>
+              <th class="col-xs-2">Date</th>
+              <th class="col-xs-2">Order No.</th>
+              <th class="col-xs-2">Customer Name</th>
+              <th class="col-xs-2">Total Price</th>
+              <th class="col-xs-2">Edit</th>
+              <th class="col-xs-2">Delete</th>
             </thead>
+            <tbody>
             <?php if ($records) {
                 foreach ($records as $record) { ?>
                   <tr>
-                    <td><?php echo $record->getField("date"); ?></td>
-                    <td><?php echo $record->getField("order_number"); ?></td>
-                    <td><?php echo $record->getField("customer_name"); ?></td>
-                    <td><?php echo $record->getField("total_price"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("date"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("order_number"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("customer_name"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("total_price"); ?></td>
                   </tr>
-              <?php } ?>
+              <?php $recordsCount = 1; } ?>
            <?php } ?>
+            </tbody>
           </table>
         </div>
+        <?php if ($recordsCount == 0) { ?>
+          <p class="col-md-12 col-xs-12 col-sm-12 text-center">No Records Found</p>
+        <?php } ?>
     </div>
   </div>
 <?php

@@ -22,8 +22,8 @@
         function __construct()
         {
             $this->connection = null;
-            $this->errorFile = __DIR__."\logfiles\logerror.txt";
-            $this->logFile = __DIR__."\logfiles\logreport.txt";
+            $this->errorFile = __DIR__."\..\logfiles\logerror.txt";
+            $this->logFile = __DIR__."\..\logfiles\logreport.txt";
         }
 
         //----- Initialize function -----
@@ -46,6 +46,8 @@
             $this->writeLog("Connection Successful!", $this->logFile);
             return true;
         }
+
+        //----- Main Operations -----
 
         public function findData($layout, $sortR)
         {
@@ -70,8 +72,11 @@
             # code...
         }
 
+        //----- Helper Methods -----
+
         public function writeLog($str, $fileName)
         {
+            date_default_timezone_set("Asia/Kolkata");
             $dateTime = date("Y-m-d h:i:sa");
             $textfile = fopen($fileName, "a");
             fwrite($textfile, "[".$dateTime."]-".$str."\n");
