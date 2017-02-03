@@ -1,0 +1,10 @@
+For HTML, CSS, Javascript, google style guide is being followed-
+
+https://google.github.io/styleguide/htmlcssguide.xml
+
+https://google.github.io/styleguide/jsguide.html
+
+For PHP, PSR2 coding style guide is followed-
+
+https://docs.opnsense.org/development/guidelines/psr2.html
+

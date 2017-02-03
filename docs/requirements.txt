@@ -1,0 +1,7 @@
+Retail Receipt (5days)
+---------------------------
+1. Should have 2 sections Order and Items
+2. First page is the Order list with Add, Edit and Delete button. Order Details will have Number, Date and time and Total price
+3. Items can be added to the Order. Item will have Name, price and quantity. Item list should be displayed on selecting the Order
+
+Notes: All screens must contains at least 5 records with some meaningful data (unlike aaa, bb, 123 )
