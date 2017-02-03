@@ -35,10 +35,10 @@
         {
             $this->connection = new FileMaker($this->databaseName, $this->hostName, $this->userName, $this->password);
             if (FileMaker::isError($this->connection)) {
-                $this->handleError("Can't connect to database");
+                //$this->handleError("Can't connect to database");
                 return false;
             }
-            $this->reportLog("Connection Successful!");
+            //$this->reportLog("Connection Successful!");
             return true;
         }
 
@@ -51,10 +51,10 @@
             $request->addSortRule($sortR, 1);
             $result = $request->execute();
             if (FileMaker::isError($result)) {
-                $this->handleError("Error fetching the data");
+                //$this->handleError("Error fetching the data");
                 return false;
             }
-            $this->reportLog("Data Fetch Successful!");
+            //$this->reportLog("Data Fetch Successful!");
             return $result;
         }
 
@@ -65,12 +65,12 @@
 
         public function handleError($str)
         {
-            error_log($str, 3, "/logfiles/errorReport.log");
+            error_log($str, 3, "./logfiles/errorReport.log");
         }
 
         public function reportLog($value)
         {
-            error_log($value, 3, "/logfiles/logreport.log");
+            error_log($value, 3, "./logfiles/logreport.log");
         }
     }
  ?>
