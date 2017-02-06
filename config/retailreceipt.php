@@ -49,6 +49,27 @@
             return true;
         }
 
+        public function findRelatedPortal($layout, $id, $relatedSet)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Failed to fetch portal", $this->errorFile);
+                return false;
+            }
+            $record = $this->connection->getRecordById($layout, $id);
+            if (FileMaker::isError($record)) {
+                $this->writeLog("Unable to getRecordById", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("getRecordById method Successful", $this->logFile);
+            $retRecords = $record->getRelatedSet($relatedSet);
+            if (FileMaker::isError($retRecords)) {
+                $this->writeLog("getRelatedSet was unsuccessful", $this->errorFile);
+                return false;
+            }
+            return $retRecords;
+
+        }
+
         //----- CRUD Operations -----
 
         public function findData($layout, $sortR)

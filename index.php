@@ -1,4 +1,5 @@
 <?php
+    session_start();
     $PageTitle = "Order List";
     require_once ("include/header.php");
     require_once "./config/config.php";
@@ -37,7 +38,9 @@
                     <td class="col-xs-2"><?php echo $record->getField("customer_name"); ?></td>
                     <td class="col-xs-2"><?php echo $record->getField("total_price"); ?></td>
                     <td class="col-xs-2">
-                      <button class="edit<?php echo $record->getRecordId() ?> btn btn-warning edit-btn">Edit</button>
+                      <a href="items.php?rid=<?php echo $record->getRecordId() ?>">
+                        <button class="edit<?php echo $record->getRecordId() ?> btn btn-warning edit-btn">Edit</button>
+                      </a>
                     </td>
                     <td class="col-xs-2">
                       <button id="delete<?php echo $record->getRecordId() ?>" class="btn btn-danger delete-btn">Delete</button>
