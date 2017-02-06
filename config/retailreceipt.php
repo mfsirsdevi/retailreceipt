@@ -49,7 +49,7 @@
             return true;
         }
 
-        //----- Main Operations -----
+        //----- CRUD Operations -----
 
         public function findData($layout, $sortR)
         {
@@ -69,9 +69,20 @@
             return $result->getRecords();
         }
 
-        public function saveToDB()
+        public function deleteRecord($layout, $id)
         {
-            # code...
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $delcmd = $this->connection->newDeleteCommand($layout, $id);
+            $retvar = $delcmd->execute();
+            if (FileMaker::isError($retvar)) {
+                $this->writeLog("Error in deleting the file", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Deletion Successful!", $this->logFile);
+            return $retvar;
         }
 
         //----- Helper Methods -----
