@@ -1,9 +1,0 @@
-[2017-02-04 01:10:26am]-Connection Successful!
-[2017-02-04 01:13:23am]-Connection Successful!
-[2017-02-04 01:19:41am]-Connection Successful!
-[2017-02-04 01:32:03am]-Connection Successful!
-[2017-02-04 01:35:01am]-Connection Successful!
-[2017-02-04 01:46:57am]-Connection Successful!
-[2017-02-04 01:50:31am]-Connection Successful!
-[2017-02-04 01:51:09am]-Connection Successful!
-[2017-02-04 01:56:00am]-Connection Successful!

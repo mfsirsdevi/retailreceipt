@@ -18,12 +18,14 @@
         public $password;
         public $errorFile;
         public $logFile;
+        public $timeZone;
 
         function __construct()
         {
             $this->connection = null;
-            $this->errorFile = __DIR__."\..\logfiles\logerror.txt";
-            $this->logFile = __DIR__."\..\logfiles\logreport.txt";
+            $this->errorFile = __DIR__."\..\logfiles\logerror.log";
+            $this->logFile = __DIR__."\..\logfiles\logreport.log";
+            $this->timeZone = "Asia/Kolkata";
         }
 
         //----- Initialize function -----
@@ -40,7 +42,7 @@
         {
             $this->connection = new FileMaker($this->databaseName, $this->hostName, $this->userName, $this->password);
             if (FileMaker::isError($this->connection)) {
-                $this->writeLog("Can't connect to database", $this->errorFile);
+                $this->writeLog("Can't connect to database",$this->errorFile);
                 return false;
             }
             $this->writeLog("Connection Successful!", $this->logFile);
@@ -76,11 +78,9 @@
 
         public function writeLog($str, $fileName)
         {
-            date_default_timezone_set("Asia/Kolkata");
+            date_default_timezone_set($this->timeZone);
             $dateTime = date("Y-m-d h:i:sa");
-            $textfile = fopen($fileName, "a");
-            fwrite($textfile, "[".$dateTime."]-".$str."\n");
-            fclose($textfile);
+            error_log("[".$dateTime."]-".$str."\n", 3, $fileName);
         }
     }
  ?>

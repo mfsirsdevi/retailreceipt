@@ -31,6 +31,12 @@
                     <td class="col-xs-2"><?php echo $record->getField("order_number"); ?></td>
                     <td class="col-xs-2"><?php echo $record->getField("customer_name"); ?></td>
                     <td class="col-xs-2"><?php echo $record->getField("total_price"); ?></td>
+                    <td class="edit<?php echo $record->getRecordId() ?> col-xs-2">
+                      <button class="btn btn-warning edit-btn">Edit</button>
+                    </td>
+                    <td class="delete<?php echo $record->getRecordId() ?> col-xs-2">
+                      <button class="btn btn-danger delete-btn">Delete</button>
+                    </td>
                   </tr>
               <?php $recordsCount = 1; } ?>
            <?php } ?>
