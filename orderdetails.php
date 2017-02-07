@@ -7,6 +7,7 @@
     //Finding the data
     $rid = $_GET['rid'];
     $records = $retailobj->findRelatedPortal("Order", $rid, "List_ODL");
+    $totalPrice = $retailobj->getFieldData("Order", $rid, "OrderTotal_ct");
 ?>
 
   <div class="container">
@@ -16,11 +17,11 @@
       </div>
       <div class="table-responsive">
           <table class="table table-bordered">
-            <tr>
-              <td>Item Number</td>
-              <td>Quantity</td>
-              <td>Price</td>
-            </tr>
+            <thead>
+              <th>Item Number</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </thead>
             <?php if ($records) {
                 foreach ($records as $record) { ?>
                     <tr>
@@ -31,6 +32,17 @@
                <?php } ?>
       <?php } ?>
           </table>
+      </div>
+      <div class="row">
+        <p>Total Price:
+        <span>
+          <?php if ($totalPrice) {
+            echo "$totalPrice";
+          } else {
+            echo "0";
+            } ?>
+        </span>
+        </p>
       </div>
   </div>
   <?php

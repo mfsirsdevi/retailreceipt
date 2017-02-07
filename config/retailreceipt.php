@@ -57,7 +57,7 @@
             }
             $record = $this->connection->getRecordById($layout, $id);
             if (FileMaker::isError($record)) {
-                $this->writeLog("Unable to getRecordById", $this->errorFile);
+                $this->writeLog("Unable to getRecordById in frp", $this->errorFile);
                 return false;
             }
             $this->writeLog("getRecordById method Successful", $this->logFile);
@@ -68,6 +68,20 @@
             }
             return $retRecords;
 
+        }
+
+        public function getFieldData($layout, $id, $fieldName)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Failed to getFieldData", $this->errorFile);
+                return false;
+            }
+            $record = $this->connection->getRecordById($layout, $id);
+            if (FileMaker::isError($record)) {
+                $this->writeLog("Unable to getRecordById in gfd", $this->errorFile);
+                return false;
+            }
+            return $record->getField($fieldName);
         }
 
         //----- CRUD Operations -----
@@ -88,6 +102,25 @@
             }
             $this->writeLog("Data Fetch Successful!", $this->logFile);
             return $result->getRecords();
+        }
+
+        public function createOrder($layout, $name, $date, $phone)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $record = $this->connection->createRecord($layout);
+            $record->setField("OrderName_ot", $name);
+            $record->setField("OrderDate_od", $date);
+            $record->setField("PhoneNum_on", $phone);
+            $result= $record->commit();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Unable to add record-".$result->getMessage(), $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Record Addition Successful!", $this->logFile);
+            return $result;
         }
 
         public function deleteRecord($layout, $id)
@@ -112,7 +145,15 @@
         {
             date_default_timezone_set($this->timeZone);
             $dateTime = date("Y-m-d h:i:sa");
-            error_log("[".$dateTime."]-".$str."\n", 3, $fileName);
+            error_log("[".$dateTime."]-".$str.PHP_EOL, 3, $fileName);
+        }
+
+        public function Sanitize($value)
+        {
+            $retvar = trim($value);
+            $retvar = strip_tags($retvar);
+            $retvar = htmlspecialchars($retvar);
+            return $retvar;
         }
     }
  ?>

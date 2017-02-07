@@ -15,7 +15,7 @@
     </div>
     <hr/>
     <div class="row">
-      <a class="btn btn-success pull-right" data-toggle="modal" data-target="#add_new_record_modal" href="#">Create Order</a>
+      <a class="btn btn-success pull-right" data-toggle="modal" data-target="#add_Order_modal" href="#">Create Order</a>
     </div>
     <hr/>
     <div class="row">
@@ -38,7 +38,7 @@
                     <td class="col-xs-2"><?php echo $record->getField("OrderName_ot"); ?></td>
                     <td class="col-xs-2"><?php echo $record->getField("OrderTotal_ct"); ?></td>
                     <td class="col-xs-2">
-                      <a href="items.php?rid=<?php echo $record->getRecordId() ?>">
+                      <a href="orderdetails.php?rid=<?php echo $record->getRecordId() ?>">
                         <button class="edit<?php echo $record->getRecordId() ?> btn btn-warning edit-btn">Edit</button>
                       </a>
                     </td>
@@ -72,6 +72,38 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <!-- Large modal -->
+
+    <div id= "add_Order_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Order Details</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="name">Name </label>
+              <input type="text" id="name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label for="odate">Date of Order </label>
+              <input type="text" id="odate" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number </label>
+              <input type="number" id="phone" class="form-control" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary add-order">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 <?php
     require_once ("include/footer.php");
