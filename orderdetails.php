@@ -18,14 +18,14 @@
       <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
-              <th>Item Number</th>
+              <th>Item Name</th>
               <th>Quantity</th>
               <th>Price</th>
             </thead>
             <?php if ($records) {
                 foreach ($records as $record) { ?>
                     <tr>
-                      <td><?php echo $record->getField("List_ODL::__kf_PId_oln") ?></td>
+                      <td><?php echo $record->getField("List_ODL::ProductName_olt") ?></td>
                       <td><?php echo $record->getField("List_ODL::Qty_oln") ?></td>
                       <td><?php echo $record->getField("List_ODL::TotalPrice_ct") ?></td>
                     </tr>

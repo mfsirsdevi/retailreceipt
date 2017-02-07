@@ -4,8 +4,6 @@ $(document).ready(function() {
     var odate = $("#odate").val();
     var phone = $("#phone").val();
 
-    console.log("Data Fetch successful");
-
     $.post("createOrder.php", {
       name: name,
       odate: odate,
