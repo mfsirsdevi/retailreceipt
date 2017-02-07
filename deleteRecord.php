@@ -8,6 +8,6 @@
     $var = implode('', $matches[0]);
 
     // delete User
-    $deleteRecords = $retailobj->deleteRecord('order', $var);
+    $deleteRecords = $retailobj->deleteRecord('Order', $var);
     echo $deleteRecords;
  ?>

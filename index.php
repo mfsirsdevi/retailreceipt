@@ -5,7 +5,7 @@
     require_once "./config/config.php";
 
     //Initializing the database connection
-    $records = $retailobj->findData("order", "date");
+    $records = $retailobj->findData("Order", "OrderDate_od");
     $recordsCount = 0;
 ?>
 
@@ -33,10 +33,10 @@
             <?php if ($records) {
                 foreach ($records as $record) { ?>
                   <tr>
-                    <td class="col-xs-2"><?php echo $record->getField("date"); ?></td>
-                    <td class="col-xs-2"><?php echo $record->getField("order_number"); ?></td>
-                    <td class="col-xs-2"><?php echo $record->getField("customer_name"); ?></td>
-                    <td class="col-xs-2"><?php echo $record->getField("total_price"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("OrderDate_od"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("___kp_OrderId_on"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("OrderName_ot"); ?></td>
+                    <td class="col-xs-2"><?php echo $record->getField("OrderTotal_ct"); ?></td>
                     <td class="col-xs-2">
                       <a href="items.php?rid=<?php echo $record->getRecordId() ?>">
                         <button class="edit<?php echo $record->getRecordId() ?> btn btn-warning edit-btn">Edit</button>
