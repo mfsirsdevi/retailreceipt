@@ -9,5 +9,6 @@
         $odate = $retailobj->Sanitize($_POST['odate']);
         $phone = $retailobj->Sanitize($_POST['phone']);
         $record = $retailobj->createOrder('Order', $name, $odate, $phone);
+        echo $record;
     }
 ?>

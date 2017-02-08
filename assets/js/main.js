@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   $(".add-order").on("click", function() {
     var name = $("#name").val();
     var odate = $("#odate").val();
@@ -9,22 +10,26 @@ $(document).ready(function() {
       odate: odate,
       phone: phone
     }, function(data, status) {
-      $("#add_Order_modal").modal("hide");
-      $("#name").val("");
-      $("#odate").val("");
-      $("#phone").val("");
-      location.reload(true);
+      if (data) {
+        $("#add_Order_modal").modal("hide");
+        $("#name").val("");
+        $("#odate").val("");
+        $("#phone").val("");
+        location.href = "products.php?id=" + data;
+      }
+      //location.reload(true);
     });
   });
+
   $(".delete-btn").on("click", function() {
-    var btid = $(this).attr('id');
+    var btid = $(this).attr("id");
     $('.deletebt').attr('id', btid);
     $("#delete_user_modal").modal("show");
   });
 
   $(".deletebt").on("click", function() {
     var conf = true;
-    var btid = $(this).attr('id');
+    var btid = $(this).attr("id");
     if (conf == true) {
         $.post("deleteRecord.php", {
                 id: btid
@@ -40,5 +45,11 @@ $(document).ready(function() {
             }
         );
     }
+  });
+
+  $("add-btn").on("click", function(e) {
+    e.preventDefault();
+    var btid = $(this).attr("id");
+
   });
 });

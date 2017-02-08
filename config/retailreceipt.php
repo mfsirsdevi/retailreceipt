@@ -120,6 +120,27 @@
                 return false;
             }
             $this->writeLog("Record Addition Successful!", $this->logFile);
+            return $record->getRecordId();
+        }
+
+        public function addItems($layout, $orid, $prid, $qty)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $pid = $this->getFieldData("Products", $prid, "___kp_ProductId_pn");
+            $oid = $this->getFieldData("Order", $orid, "___kp_OrderId_on");
+            $record = $this->connection->createRecord($layout);
+            $record->setField("__kf_PId_oln", $pid);
+            $record->setField("Qty_oln", $qty);
+            $record->setField("__kf_OId_oln", $oid);
+            $result= $record->commit();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Unable to add item-".$result->getMessage(), $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Item Addition Successful!", $this->logFile);
             return $result;
         }
 

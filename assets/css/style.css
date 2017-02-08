@@ -2,3 +2,14 @@ h1 {
   margin: 0.4em 0;
 }
 
+#action-div {
+    border: 1px solid #cecece;
+}
+
+#product-list {
+    background-color: #e6e6e6;
+}
+
+#order-details {
+    background-color: #b3b3b3;
+}
