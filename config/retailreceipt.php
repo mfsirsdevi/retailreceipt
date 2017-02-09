@@ -49,6 +49,21 @@
             return true;
         }
 
+        public function getRecord($layout, $id)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Failed to fetch portal", $this->errorFile);
+                return false;
+            }
+            $record = $this->connection->getRecordById($layout, $id);
+            if (FileMaker::isError($record)) {
+                $this->writeLog("Unable to getRecordById in gr", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("getRecordById method Successful", $this->logFile);
+            return $record;
+        }
+
         public function findRelatedPortal($layout, $id, $relatedSet)
         {
             if (!$this->DBLogin()) {
@@ -63,7 +78,7 @@
             $this->writeLog("getRecordById method Successful", $this->logFile);
             $retRecords = $record->getRelatedSet($relatedSet);
             if (FileMaker::isError($retRecords)) {
-                $this->writeLog("getRelatedSet was unsuccessful", $this->errorFile);
+                $this->writeLog("getRelatedSet was unsuccessful-".$retRecords->getMessage(), $this->errorFile);
                 return false;
             }
             return $retRecords;
@@ -82,6 +97,38 @@
                 return false;
             }
             return $record->getField($fieldName);
+        }
+
+        public function findField($layout, $criteria)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Failed to ff", $this->errorFile);
+                return false;
+            }
+            $cmd = $this->connection->newFindCommand($layout);
+            $cmd->addFindCriterion("___kp_ProductId_pn", $criteria);
+            $result = $cmd->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Unable to getRecordById in ff-".$result->getMessage(), $this->errorFile);
+                return false;
+            }
+            return $result->getRecords();
+        }
+
+        public function readRecord($layout, $criteria)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Failed to rr", $this->errorFile);
+                return false;
+            }
+            $cmd = $this->connection->newFindCommand($layout);
+            $cmd->addFindCriterion("ProductName_pt", $criteria."...");
+            $result = $cmd->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Unable to getRecordById in rr-".$result->getMessage(), $this->errorFile);
+                return false;
+            }
+            return $result->getRecords();
         }
 
         //----- CRUD Operations -----
@@ -144,7 +191,7 @@
             return $result;
         }
 
-        public function deleteRecord($layout, $id)
+        public function deleteRecords($layout, $id)
         {
             if (!$this->DBLogin()) {
                 $this->writeLog("Error in database connection", $this->errorFile);

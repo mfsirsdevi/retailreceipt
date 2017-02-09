@@ -1,5 +1,8 @@
 <?php
     session_start();
+    /*
+     * Main page of the app containing the main order table and option for creation and edition and deletion of the orders
+     */
     $PageTitle = "Order List";
     require_once ("include/header.php");
     require_once "./config/config.php";
@@ -9,7 +12,7 @@
     $recordsCount = 0;
 ?>
 
-  <div class="container">
+  <div id="wrapper" class="container">
     <div class="row">
       <h1 class="text-center text-uppercase"><strong>order list</strong></h1>
     </div>
@@ -38,7 +41,7 @@
                     <td class="col-xs-2"><?php echo $record->getField("OrderName_ot"); ?></td>
                     <td class="col-xs-2"><?php echo $record->getField("OrderTotal_ct"); ?></td>
                     <td class="col-xs-2">
-                      <a href="orderdetails.php?rid=<?php echo $record->getRecordId() ?>">
+                      <a href="products.php?id=<?php echo $record->getRecordId() ?>">
                         <button class="edit<?php echo $record->getRecordId() ?> btn btn-warning edit-btn">Edit</button>
                       </a>
                     </td>
@@ -79,7 +82,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Order Details</h4>
+            <h4 class="modal-title">Customer Details</h4>
           </div>
           <div class="modal-body">
             <div class="form-group">

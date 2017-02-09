@@ -25,9 +25,12 @@
             <?php if ($records) {
                 foreach ($records as $record) { ?>
                     <tr>
-                      <td><?php echo $record->getField("List_ODL::ProductName_olt") ?></td>
+                      <td>
+                        <?php echo $record->getField("List_ODL::ProductName_olt") ?>
+                      </td>
                       <td><?php echo $record->getField("List_ODL::Qty_oln") ?></td>
                       <td><?php echo $record->getField("List_ODL::TotalPrice_ct") ?></td>
+                      <td><?php echo $record->getField("List_ODL::__kf_PId_oln") ?></td>
                     </tr>
                <?php } ?>
       <?php } ?>

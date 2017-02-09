@@ -23,6 +23,7 @@ $(document).ready(function() {
 
   $(".delete-btn").on("click", function() {
     var btid = $(this).attr("id");
+    var tbl = "Order";
     $('.deletebt').attr('id', btid);
     $("#delete_user_modal").modal("show");
   });
@@ -32,7 +33,8 @@ $(document).ready(function() {
     var btid = $(this).attr("id");
     if (conf == true) {
         $.post("deleteRecord.php", {
-                id: btid
+                id: btid,
+                tbl: tbl
             },
             function (data, status) {
                 // reload Users by using readRecords();
