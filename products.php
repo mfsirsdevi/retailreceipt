@@ -7,7 +7,6 @@
     require_once ("include/header.php");
     require_once ("config/config.php");
 
-
     $id = $_GET['id'];
     $record = $retailobj->getRecord("Order", $id);
     $records = $retailobj->findRelatedPortal("Order", $id, "List_ODL");
@@ -24,7 +23,9 @@
           <p>Bhubaneswar</p>
         </div>
         <div class="pull-right">
-          <img class="img-responsive img-thumbnail" src="assets/images/google.png" alt="logo">
+          <a href="index.php">
+            <img class="img-responsive img-thumbnail" src="assets/images/google.png" alt="logo">
+          </a>
         </div>
       </div>
       <div class="row">
@@ -69,8 +70,8 @@
           <tbody>
             <?php if ($records) {
                 foreach ($records as $row) { ?>
-            <tr id="item<?php $row->getRecordId() ?>">
-              <td id="name<?php $row->getRecordId() ?>" class="data-edit itm-name">
+            <tr id="item<?php echo $row->getRecordId() ?>">
+              <td id="name<?php echo $row->getRecordId() ?>" class="data-edit itm-name">
                 <?php echo $row->getField("List_ODL::ProductName_olt") ?>
               </td>
               <td id="item-rate" class="itm-rate">
@@ -121,4 +122,4 @@
 <?php
     $customjs = "assets/js/product.js";
     require_once ("include/footer.php");
-  ?>
+?>

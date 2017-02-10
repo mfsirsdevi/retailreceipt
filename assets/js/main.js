@@ -31,6 +31,7 @@ $(document).ready(function() {
   $(".deletebt").on("click", function() {
     var conf = true;
     var btid = $(this).attr("id");
+    var tbl = "Order";
     if (conf == true) {
         $.post("deleteRecord.php", {
                 id: btid,

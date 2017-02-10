@@ -37,7 +37,7 @@ $(document).ready(function() {
 
   // Calling updateNumber method on key and mouse actions
 
-  $(document).on("keydown mousewheel", updateNumber);
+  $(document).on("input keyup mousewheel", updateNumber);
 
 
   // Toggle contenteditable attribute from the data-edit class
@@ -54,7 +54,7 @@ $(document).ready(function() {
 
   function generateTableRow() {
     var emptyRow = $("<tr>");
-    $(emptyRow).append('<td class="data-edit itm-name"><div contenteditable="false"><span contenteditable="false" class="suggesstion-box"></span></div></td>');
+    $(emptyRow).append('<td class="data-edit itm-name"></td>');
     $(emptyRow).append('<td class="itm-rate"></td>');
     $(emptyRow).append('<td class="data-edit itm-qty"></td>');
     $(emptyRow).append('<td class="itm-price"></td>');
@@ -74,10 +74,6 @@ $(document).ready(function() {
   // Deleting row from the item table
 
   $(document).on("click", ".del-row", function(){
-    if (!$(this).find("id")) {
-      $(this).parent().parent().remove();
-      updateInvoice();
-    }
     var btid = $(this).attr("id");
     var tbl = "DisplayDetails";
     $.post("deleteRecord.php", {
@@ -86,7 +82,6 @@ $(document).ready(function() {
             },
             function (data, status) {
               if (data) {
-                console.log(data);
                 $(this).parent().parent().remove();
                 updateInvoice();
               }
@@ -105,33 +100,61 @@ $(document).ready(function() {
     var oid = $.trim($("#custId input").val());
     var oname = $.trim($("#cust-name").text());
     var onum = $.trim($("#cust-num").text());
-
-    console.log(onum);
-    console.log(oname);
-    console.log(oid);
+    var total = $.trim($("#total-price").text());
+    var orderDetails = [oid, oname, onum, total];
+    var order = JSON.stringify(orderDetails);
+    var tbl = [];
+    for(var a = $(".item tbody tr"), i = 0; a[i]; ++i) {
+      cells = $(a[i]).children().toArray();
+      cells.splice(4,1);
+      var celldata = [];
+      for (var i = 0; i < cells.length; i++) {
+        celldata.push($.trim($(cells[i]).text()));
+      }
+      tbl.push(celldata);
+    }
+    var items = JSON.stringify(tbl);
+    console.log(items);
+/*
+    $.post("updateRecords.php", {
+        order: order,
+        items: items
+      },function(data, success) {
+        if (data) {
+          console.log(data);
+        }
+      });*/
   });
 
   // ajax call to add items to the list - under progress
-  $(".itm-name").keyup(function(){
+  $(document).on("input", ".itm-name", function(){
     $.ajax({
     type: "POST",
     url: "readRecord.php",
-    data:'keyword='+$(this).val(),
+    data:'keyword='+$(this).text(),
     beforeSend: function(){
       $('.suggesstion-box').attr('readonly', 'true');
     },
     success: function(data){
       $(".suggesstion-box").show();
       $(".suggesstion-box").html(data);
-      $('.suggesstion-box').attr('readonly', 'true');
-      $(".itm-name").removeAttr("contenteditable");
     }
     });
   });
 
+  var table = $(".item tbody");
+
   function selectValue(val1, val2) {
-    $(".itm-name").html(val1);
-    $(".itm-name").parent().find(".itm-rate").html(val2);
+    $.post("updateTable.php", {
+        name: val1,
+        rate: val2
+      },
+      function(data, success) {
+
+        $(table).find("tr:last-child").replaceWith(data);
+      }
+    );
+
     $(".suggesstion-box").hide();
     updateInvoice();
   }

@@ -122,7 +122,7 @@
                 return false;
             }
             $cmd = $this->connection->newFindCommand($layout);
-            $cmd->addFindCriterion("ProductName_pt", $criteria."...");
+            $cmd->addFindCriterion("ProductName_pt", $criteria);
             $result = $cmd->execute();
             if (FileMaker::isError($result)) {
                 $this->writeLog("Unable to getRecordById in rr-".$result->getMessage(), $this->errorFile);
