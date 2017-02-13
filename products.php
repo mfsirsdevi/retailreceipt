@@ -73,16 +73,20 @@
           <?php if ($records) {
               foreach ($records as $row) { ?>
           <tr id="item <?php echo $row->getRecordId() ?>">
-            <td contenteditable="true"><?php echo $row->getField("List_ODL::ProductName_olt") ?></td>
-            <td>
+            <td contenteditable="true" class="itm-name" id="name<?php $row->getRecordId() ?>"><?php echo $row->getField("List_ODL::ProductName_olt") ?></td>
+            <td id="rate<?php $row->getRecordId() ?>">
               <?php
                   $pid = $row->getField("List_ODL::__kf_PId_oln");
                   $prodRate = $retailobj->findField("Products", $pid);
                   echo $prodRate[0]->getField("ProductPrice_pn");
                ?>
             </td>
-            <td contenteditable="true"><?php echo $row->getField("List_ODL::Qty_oln") ?></td>
-            <td><?php echo $row->getField("List_ODL::TotalPrice_ct") ?></td>
+            <td contenteditable="true" id="qty<?php $row->getRecordId() ?>">
+              <?php echo $row->getField("List_ODL::Qty_oln") ?>
+            </td>
+            <td>
+              <?php echo $row->getField("List_ODL::TotalPrice_ct") ?>
+            </td>
             <td id="del<?php echo $row->getRecordId() ?>">
               <button class="btn btn-danger del-row">Delete</button>
             </td>

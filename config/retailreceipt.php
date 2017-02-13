@@ -115,6 +115,23 @@
             return $result->getRecords();
         }
 
+        public function updateField($var, $layout, $fieldName, $value)
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Failed to update order line", $this->errorFile);
+                return false;
+            }
+            $cmd = $this->connection->newEditCommand($layout, $var);
+            $cmd->setField($fieldName, $value);
+            $result = $cmd->execute();
+            if (FileMaker::isError($result)) {
+                $this->writeLog("Unable to getRecordById in ff-".$result->getMessage(), $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Data Update Successful!", $this->logFile);
+            return true;
+        }
+
         public function readRecord($layout, $criteria)
         {
             if (!$this->DBLogin()) {
@@ -205,6 +222,22 @@
             }
             $this->writeLog("Deletion Successful!", $this->logFile);
             return true;
+        }
+
+        public function addOrderLine()
+        {
+            if (!$this->DBLogin()) {
+                $this->writeLog("Error in database connection", $this->errorFile);
+                return false;
+            }
+            $addcmd = $this->connection->newAddCommand("DisplayDetails");
+            $retvar = $addcmd->execute();
+            if (FileMaker::isError($retvar)) {
+                $this->writeLog("Error in adding the record", $this->errorFile);
+                return false;
+            }
+            $this->writeLog("Addition Successful!", $this->logFile);
+            return $retvar->getRecords();
         }
 
         //----- Helper Methods -----

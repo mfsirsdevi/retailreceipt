@@ -50,25 +50,15 @@ $(document).ready(function() {
     }
   });
 
-  // function to create a new row and add it to the end of item table
-
-  function generateTableRow() {
-    var emptyRow = $("<tr>");
-    $(emptyRow).append('<td class="data-edit itm-name"></td>');
-    $(emptyRow).append('<td class="itm-rate"></td>');
-    $(emptyRow).append('<td class="data-edit itm-qty"></td>');
-    $(emptyRow).append('<td class="itm-price"></td>');
-    $(emptyRow).append('<td><button class="btn btn-danger del-row">Delete</button></td>');
-    return emptyRow;
-  }
-
   // Calling updateInvoice function on each data input
   $(document).on("input", ".data-edit", updateInvoice);
 
   // Adding row at the end of the item table
   $(".add-row").on("click", function(){
-    $("#item-details").append(generateTableRow());
-    updateInvoice();
+    $.post("addItem.php", {}, function(data, success) {
+      $("#item-details").append(data);
+      updateInvoice();
+    });
   });
 
   // Deleting row from the item table
@@ -77,17 +67,16 @@ $(document).ready(function() {
     var btid = $(this).parent().attr("id");
     var tbl = "DisplayDetails";
     var trd = $(this).parent().parent();
-    console.log(trd);
     $.post("deleteRecord.php", {
-                id: btid,
-                tbl: tbl
-            },
-            function (data, status) {
-              if (data) {
-                $(trd).remove();
-                updateInvoice();
-              }
-            }
+        id: btid,
+        tbl: tbl
+      },
+      function (data, status) {
+        if (data) {
+          $(trd).remove();
+          updateInvoice();
+        }
+      }
     );
   });
 
@@ -107,15 +96,14 @@ $(document).ready(function() {
     var order = JSON.stringify(orderDetails);
     var tbl = [];
     $("#item-details tr").each(function(index, element) {
+      //var itid = $(element).attr("id");
       var cells = $(element).children().toArray();
       var data = [$.trim($(cells[0]).text()), $.trim($(cells[1]).text()), $.trim($(cells[2]).text()), $.trim($(cells[3]).text())];
       tbl.push(data);
     });
     var itemData = JSON.stringify(tbl);
-    // console.log(order);
-    // console.log(itemData);
 
-    $.post("updateRecords.php", {
+    $.post("printRecords.php", {
         order: order,
         items: itemData
       },function(data, success) {
@@ -127,6 +115,7 @@ $(document).ready(function() {
 
   // ajax call to add items to the list - under progress
   $(document).on("input", ".itm-name", function(){
+    $(this).addClass("isActive");
     $.ajax({
     type: "POST",
     url: "readRecord.php",
@@ -141,23 +130,6 @@ $(document).ready(function() {
     });
   });
 
-  var table = $(".item tbody");
-
-  function selectValue(val1, val2) {
-    $.post("updateTable.php", {
-        name: val1,
-        rate: val2
-      },
-      function(data, success) {
-
-        $(table).find("tr:last-child").replaceWith(data);
-      }
-    );
-
-    $(".suggesstion-box").hide();
-    updateInvoice();
-  }
-
   // Adding data to the item on click of auto generated list
   $(document).on("click", ".it-name", function(){
     var val1 = $.trim($(this).text());
@@ -165,5 +137,13 @@ $(document).ready(function() {
     selectValue(val1, val2);
   });
 
+  var table = $("#item-details");
 
+  function selectValue(val1, val2) {
+    $(table).find(".isActive").html(val1);
+    $(table).find(".isActive").next().html(val2);
+    $(".suggesstion-box").hide();
+    $(table).find(".isActive").removeClass("isActive");
+    updateInvoice();
+  }
 });
