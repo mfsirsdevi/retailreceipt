@@ -13,33 +13,34 @@
 
  ?>
   <div id="wrapper" class="container">
-      <div class="row">
-        <h3 class="text-uppercase text-center invoice-title">invoice</h3>
+    <div class="row">
+      <h3 class="text-uppercase text-center invoice-title">invoice</h3>
+    </div>
+    <div class="row">
+      <div class="pull-left address-details">
+        <p>Mindfire</p>
+        <p>Dlf cybercity</p>
+        <p>Bhubaneswar</p>
       </div>
-      <div class="row">
-        <div class="pull-left address-details">
-          <p>Mindfire</p>
-          <p>Dlf cybercity</p>
-          <p>Bhubaneswar</p>
-        </div>
-        <div class="pull-right">
-          <a href="index.php">
-            <img class="img-responsive img-thumbnail" src="assets/images/google.png" alt="logo">
-          </a>
-        </div>
+      <div class="pull-right">
+        <a href="index.php">
+          <img class="img-responsive img-thumbnail" src="assets/images/google.png" alt="logo">
+        </a>
       </div>
-      <div class="row">
-        <h4>Order Details</h4>
-      </div>
-      <div class="table-responsive row">
-        <table class="table table-bordered">
-          <thead>
-            <th>Invoice #</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Date</th>
-          </thead>
-          <tbody>
+    </div>
+    <div class="row">
+      <h4>Order Details</h4>
+    </div>
+    <div class="table-responsive row">
+      <table class="table table-bordered">
+        <thead>
+          <th>Invoice #</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Date</th>
+        </thead>
+        <tbody>
+          <tr>
             <td id="custId"><?php echo $record->getField("___kp_OrderId_on"); ?>
               <input type="hidden" value="<?php echo $record->getRecordId() ?>">
             </td>
@@ -52,73 +53,67 @@
             <td>
               <?php echo $record->getField("OrderDate_od"); ?>
             </td>
-          </tbody>
-        </table>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <h4>Item Details</h4>
+    </div>
+    <div class="table-responsive row">
+      <table class="table table-bordered item">
+        <thead>
+          <th>Name</th>
+          <th>Rate</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Action</th>
+        </thead>
+        <tbody id="item-details">
+          <?php if ($records) {
+              foreach ($records as $row) { ?>
+          <tr id="item <?php echo $row->getRecordId() ?>">
+            <td contenteditable="true"><?php echo $row->getField("List_ODL::ProductName_olt") ?></td>
+            <td>
+              <?php
+                  $pid = $row->getField("List_ODL::__kf_PId_oln");
+                  $prodRate = $retailobj->findField("Products", $pid);
+                  echo $prodRate[0]->getField("ProductPrice_pn");
+               ?>
+            </td>
+            <td contenteditable="true"><?php echo $row->getField("List_ODL::Qty_oln") ?></td>
+            <td><?php echo $row->getField("List_ODL::TotalPrice_ct") ?></td>
+            <td id="del<?php echo $row->getRecordId() ?>">
+              <button class="btn btn-danger del-row">Delete</button>
+            </td>
+          </tr>
+            <?php } ?>
+          <?php } ?>
+        </tbody>
+      </table>
+      <div>
+        <span class="suggesstion-box"></span>
       </div>
-      <div class="row">
-        <h4>Item Details</h4>
+    </div>
+    <div class="row">
+      <div class="pull-left">
+        <button class="btn btn-primary add-row">Add Item</button>
       </div>
-      <div class="table-responsive row">
-        <table class="table table-bordered item">
-          <thead>
-            <th>Name</th>
-            <th>Rate</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-          </thead>
-          <tbody>
-            <?php if ($records) {
-                foreach ($records as $row) { ?>
-            <tr id="item<?php echo $row->getRecordId() ?>">
-              <td id="name<?php echo $row->getRecordId() ?>" class="data-edit itm-name">
-                <?php echo $row->getField("List_ODL::ProductName_olt") ?>
-              </td>
-              <td id="item-rate" class="itm-rate">
-                <?php
-                    $pid = $row->getField("List_ODL::__kf_PId_oln");
-                    $prodRate = $retailobj->findField("Products", $pid);
-                    echo $prodRate[0]->getField("ProductPrice_pn");
-                 ?>
-                 <input type="hidden" value="<?php echo $pid ?>">
-              </td>
-              <td id="item-qty" class="data-edit itm-qty">
-                <?php echo $row->getField("List_ODL::Qty_oln") ?>
-              </td>
-              <td id="item-price" class="itm-price">
-                <?php echo $row->getField("List_ODL::TotalPrice_ct") ?>
-              </td>
-              <td>
-                <button id="del<?php echo $row->getRecordId() ?>" class="btn btn-danger del-row">Delete</button>
+      <div class="pull-right">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tr>
+              <th>Total</th>
+              <td id="total-price">
+                <?php echo !$record->getField("OrderTotal_ct") ? 0 : $record->getField("OrderTotal_ct"); ?>
               </td>
             </tr>
-              <?php } ?>
-            <?php } ?>
-          </tbody>
-        </table>
-        <div>
-          <span class="suggesstion-box"></span>
+          </table>
         </div>
       </div>
-      <div class="row">
-        <div class="pull-left">
-          <button class="btn btn-primary add-row">Add Item</button>
-        </div>
-        <div class="pull-right">
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <tr>
-                <th>Total</th>
-                <td id="total-price">
-                  <?php echo !$record->getField("OrderTotal_ct") ? 0 : $record->getField("OrderTotal_ct"); ?>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-      <button id="checkout" href="#" class="center-block btn btn-primary">Check Out</button>
     </div>
+    <button id="checkout" href="#" class="center-block btn btn-primary">Check Out</button>
+  </div>
 <?php
     $customjs = "assets/js/product.js";
     require_once ("include/footer.php");

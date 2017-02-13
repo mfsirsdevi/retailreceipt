@@ -3,8 +3,8 @@ $(document).ready(function() {
   // function to update the invoice whenever a change occurs and update proper values.
   function updateInvoice() {
     var total = 0, cells, price, i;
-    for(var a = $(".item tbody tr"), i = 0; a[i]; ++i) {
-      cells = $(a[i]).children().toArray();
+    $("#item-details tr").each( function(index, element) {
+      cells = $(element).children().toArray();
       price = parseFloat($(cells[1]).html()) * parseFloat($(cells[2]).html());
       total += price;
       if (!isNaN(price)) {
@@ -12,7 +12,7 @@ $(document).ready(function() {
       } else {
         $(cells[3]).html(0);
       }
-    }
+    });
     if (!isNaN(total)) {
       $("#total-price").html(total);
     }
@@ -67,26 +67,28 @@ $(document).ready(function() {
 
   // Adding row at the end of the item table
   $(".add-row").on("click", function(){
-    $(".item tbody").append(generateTableRow());
+    $("#item-details").append(generateTableRow());
     updateInvoice();
   });
 
   // Deleting row from the item table
 
   $(document).on("click", ".del-row", function(){
-    var btid = $(this).attr("id");
+    var btid = $(this).parent().attr("id");
     var tbl = "DisplayDetails";
+    var trd = $(this).parent().parent();
+    console.log(trd);
     $.post("deleteRecord.php", {
                 id: btid,
                 tbl: tbl
             },
             function (data, status) {
               if (data) {
-                $(this).parent().parent().remove();
+                $(trd).remove();
                 updateInvoice();
               }
             }
-        );
+    );
   });
 
   // Remove contenteditable attribute on blur from all the elements
@@ -104,26 +106,23 @@ $(document).ready(function() {
     var orderDetails = [oid, oname, onum, total];
     var order = JSON.stringify(orderDetails);
     var tbl = [];
-    for(var a = $(".item tbody tr"), i = 0; a[i]; ++i) {
-      cells = $(a[i]).children().toArray();
-      cells.splice(4,1);
-      var celldata = [];
-      for (var i = 0; i < cells.length; i++) {
-        celldata.push($.trim($(cells[i]).text()));
-      }
-      tbl.push(celldata);
-    }
-    var items = JSON.stringify(tbl);
-    console.log(items);
-/*
+    $("#item-details tr").each(function(index, element) {
+      var cells = $(element).children().toArray();
+      var data = [$.trim($(cells[0]).text()), $.trim($(cells[1]).text()), $.trim($(cells[2]).text()), $.trim($(cells[3]).text())];
+      tbl.push(data);
+    });
+    var itemData = JSON.stringify(tbl);
+    // console.log(order);
+    // console.log(itemData);
+
     $.post("updateRecords.php", {
         order: order,
-        items: items
+        items: itemData
       },function(data, success) {
         if (data) {
-          console.log(data);
+          location.href = "test.php";
         }
-      });*/
+      });
   });
 
   // ajax call to add items to the list - under progress

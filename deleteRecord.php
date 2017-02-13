@@ -11,7 +11,5 @@
         // delete User
         $deleteRecords = $retailobj->deleteRecords($tbl, $var);
         echo $deleteRecords;
-   } else {
-    echo true;
-   }
+    }
  ?>

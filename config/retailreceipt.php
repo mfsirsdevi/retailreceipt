@@ -204,7 +204,7 @@
                 return false;
             }
             $this->writeLog("Deletion Successful!", $this->logFile);
-            return $retvar;
+            return true;
         }
 
         //----- Helper Methods -----

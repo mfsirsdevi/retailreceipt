@@ -3,8 +3,8 @@
     require ('config/fpdf/fpdf.php');
     require ('config/config.php');
 
-    $orders = json_decode($_POST['order']);
-    $items = json_decode($_POST['items'],true);
+    $orders = $_SESSION['order'];
+    $items = $_SESSION['items'];
     $headerOrder = array('Invoice #', 'Name', 'Phone No.', 'Total Price');
     $headerItem = array('Name', 'Rate', 'Quantity', 'Total');
     $pdf = new FPDF();
@@ -19,10 +19,9 @@
     // Data
     foreach($orders as $row)
     {
-        foreach($row as $col)
-            $pdf->Cell(40,6,$col,1);
-        $pdf->Ln();
+        $pdf->Cell(40,6,$row,1);
     }
+    $pdf->Ln();
     // Items Details
     $pdf->Cell(40,10,'Items Details:');
     $pdf->Ln();
