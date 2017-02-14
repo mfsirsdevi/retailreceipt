@@ -7,7 +7,8 @@
      */
     require_once "filemaker/FileMaker.php";
     /*
-     *
+     * class name: retailreceipt
+     * Description: Builds the receipt for the app and updates the tables of database
      */
     class RetailReceipt
     {
@@ -20,7 +21,10 @@
         public $logFile;
         public $timeZone;
 
-        function __construct()
+        /*
+         * constructor of the class - initializes the log file paths, connection object and timezone
+         */
+        public function __construct()
         {
             $this->connection = null;
             $this->errorFile = __DIR__."\..\logfiles\logerror.log";
@@ -28,7 +32,7 @@
             $this->timeZone = "Asia/Kolkata";
         }
 
-        //----- Initialize function -----
+        //----- Initialization functions -----
 
         public function initDB($db, $host, $user, $pass)
         {
@@ -48,6 +52,8 @@
             $this->writeLog("Connection Successful!", $this->logFile);
             return true;
         }
+
+        //----- Main Functions -----
 
         public function getRecord($layout, $id)
         {
@@ -125,10 +131,11 @@
             $cmd->setField($fieldName, $value);
             $result = $cmd->execute();
             if (FileMaker::isError($result)) {
-                $this->writeLog("Unable to getRecordById in ff-".$result->getMessage(), $this->errorFile);
+                $this->writeLog("Unable to update field-".$result->getMessage(), $this->errorFile);
                 return false;
             }
             $this->writeLog("Data Update Successful!", $this->logFile);
+            $this->writeLog("Data was-".$value, $this->logFile);
             return true;
         }
 
@@ -187,26 +194,11 @@
             return $record->getRecordId();
         }
 
-        public function addItems($layout, $orid, $prid, $qty)
-        {
-            if (!$this->DBLogin()) {
-                $this->writeLog("Error in database connection", $this->errorFile);
-                return false;
-            }
-            $pid = $this->getFieldData("Products", $prid, "___kp_ProductId_pn");
-            $oid = $this->getFieldData("Order", $orid, "___kp_OrderId_on");
-            $record = $this->connection->createRecord($layout);
-            $record->setField("__kf_PId_oln", $pid);
-            $record->setField("Qty_oln", $qty);
-            $record->setField("__kf_OId_oln", $oid);
-            $result= $record->commit();
-            if (FileMaker::isError($result)) {
-                $this->writeLog("Unable to add item-".$result->getMessage(), $this->errorFile);
-                return false;
-            }
-            $this->writeLog("Item Addition Successful!", $this->logFile);
-            return $result;
-        }
+        /*
+         * function: deleteRecords
+         * params: layout, recordId
+         * returns: true if record gets deleted, else false
+         */
 
         public function deleteRecords($layout, $id)
         {
@@ -224,13 +216,20 @@
             return true;
         }
 
-        public function addOrderLine()
+        /*
+         * function: addOrderLine
+         * params: record Id of the OrderLine table record
+         * returns the records created by the function
+         */
+
+        public function addOrderLine($id)
         {
             if (!$this->DBLogin()) {
                 $this->writeLog("Error in database connection", $this->errorFile);
                 return false;
             }
             $addcmd = $this->connection->newAddCommand("DisplayDetails");
+            $addcmd->setField('__kf_OId_oln', $id);
             $retvar = $addcmd->execute();
             if (FileMaker::isError($retvar)) {
                 $this->writeLog("Error in adding the record", $this->errorFile);
@@ -240,7 +239,7 @@
             return $retvar->getRecords();
         }
 
-        //----- Helper Methods -----
+        //----- Helper Functions -----
 
         public function writeLog($str, $fileName)
         {

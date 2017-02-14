@@ -5,16 +5,16 @@ $(document).ready(function() {
     var total = 0, cells, price, i;
     $("#item-details tr").each( function(index, element) {
       cells = $(element).children().toArray();
-      price = parseFloat($(cells[1]).html()) * parseFloat($(cells[2]).html());
+      price = parseFloat($(cells[1]).text()) * parseFloat($(cells[2]).text());
       total += price;
       if (!isNaN(price)) {
-        $(cells[3]).html(price);
+        $(cells[3]).text(price);
       } else {
-        $(cells[3]).html(0);
+        $(cells[3]).text(0);
       }
     });
     if (!isNaN(total)) {
-      $("#total-price").html(total);
+      $("#total-price").text(total);
     }
   }
 
@@ -52,10 +52,27 @@ $(document).ready(function() {
 
   // Calling updateInvoice function on each data input
   $(document).on("input", ".data-edit", updateInvoice);
+  $(document).on("input blur", ".itm-qty", function() {
+    var id = $(this).attr("id");
+    var qty = parseFloat($(this).html());
+    var pid = $(this).parent().find("input").val();
+    $.post("updateTable.php", {
+      id: id,
+      pid: pid,
+      qty: qty
+    }, function(data, success){
+      if (data) {
+        updateInvoice();
+      }
+    });
+  });
 
   // Adding row at the end of the item table
   $(".add-row").on("click", function(){
-    $.post("addItem.php", {}, function(data, success) {
+    var id = parseFloat($.trim($("#custId").text()));
+    $.post("addItem.php", {
+      id: id
+    }, function(data, success) {
       $("#item-details").append(data);
       updateInvoice();
     });
@@ -133,15 +150,17 @@ $(document).ready(function() {
   // Adding data to the item on click of auto generated list
   $(document).on("click", ".it-name", function(){
     var val1 = $.trim($(this).text());
-    var val2 = parseFloat($.trim($(this).find("input").val()));
-    selectValue(val1, val2);
+    var val2 = parseFloat($.trim($(this).find(".rate").val()));
+    var val3 = parseFloat($.trim($(this).find(".pid").val()));
+    selectValue(val1, val2, val3);
   });
 
   var table = $("#item-details");
 
-  function selectValue(val1, val2) {
+  function selectValue(val1, val2, val3) {
     $(table).find(".isActive").html(val1);
     $(table).find(".isActive").next().html(val2);
+    $(table).find(".isActive").parent().find("input").val(val3);
     $(".suggesstion-box").hide();
     $(table).find(".isActive").removeClass("isActive");
     updateInvoice();

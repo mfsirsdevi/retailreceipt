@@ -81,7 +81,7 @@
                   echo $prodRate[0]->getField("ProductPrice_pn");
                ?>
             </td>
-            <td contenteditable="true" id="qty<?php $row->getRecordId() ?>">
+            <td contenteditable="true" class="itm-qty" id="qty<?php $row->getRecordId() ?>">
               <?php echo $row->getField("List_ODL::Qty_oln") ?>
             </td>
             <td>
@@ -90,6 +90,7 @@
             <td id="del<?php echo $row->getRecordId() ?>">
               <button class="btn btn-danger del-row">Delete</button>
             </td>
+            <input type="hidden" value="0">
           </tr>
             <?php } ?>
           <?php } ?>
